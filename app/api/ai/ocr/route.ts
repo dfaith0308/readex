@@ -69,13 +69,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ highlights: [] })
     }
 
-    const raw = (parsed.highlights ?? []).filter(
+    const filtered = (parsed.highlights ?? []).filter(
       (h): h is string => typeof h === 'string' && h.trim().length > 0
     )
-
     // 품질 필터: 10자 이하 제거 + 중복 제거 + 최대 10개
     const seen = new Set<string>()
-    const highlights = raw
+    const highlights = filtered
       .filter((h) => {
         if (h.length <= 10) return false
         if (seen.has(h)) return false
